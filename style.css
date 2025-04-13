@@ -1,0 +1,117 @@
+body {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif; /* Fuente más "cute" */
+    background-color: #fce4ec; /* Rosa pastel muy claro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.card {
+    /* background-color: #fff;  Blanco */ /* Comentado para usar gradiente - Corregido */
+    background-image: linear-gradient(to bottom right, #fff, #fce4ec); /* Gradiente de blanco a rosa pastel */
+    border-radius: 20px; /* Bordes más redondeados */
+    box-shadow: 0 6px 12px rgba(233, 30, 99, 0.15); /* Sombra rosa suave */
+    padding: 25px 40px; /* Ajusta padding para formato horizontal */
+    max-width: 700px; /* Más ancho para formato horizontal */
+    width: 90%;
+    border: 2px solid #f8bbd0; /* Borde rosa claro */
+    position: relative; /* Necesario para posicionar el pseudo-elemento */
+    overflow: hidden; /* Para asegurar que el sello no se salga si es grande */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Añadido para la animación de hover */
+}
+
+.card:hover { /* Efecto al pasar el ratón */
+    transform: scale(1.03); /* Agranda ligeramente la tarjeta */
+    box-shadow: 0 10px 20px rgba(233, 30, 99, 0.25); /* Sombra más pronunciada */
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+}
+
+.card::after { /* Pseudo-elemento para el sello de osito */
+    content: '🧸'; /* Carácter de osito de peluche */
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 3em; /* Tamaño del osito */
+    opacity: 0.3; /* Hacerlo un poco transparente como un sello */
+    color: #e91e63; /* Color rosa principal, puede ajustarse */
+    animation: pulse 4s infinite ease-in-out; /* Añadida animación de pulso */
+}
+
+.header {
+    text-align: center;
+    border-bottom: 1px dashed #f8bbd0; /* Línea discontinua rosa */
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.2em;
+    color: #e91e63; /* Rosa principal */
+}
+
+.header h2 {
+    margin: 5px 0 0;
+    font-size: 1.1em;
+    color: #f06292; /* Rosa más claro */
+    font-weight: normal;
+}
+
+h3 {
+    color: #8e24aa; /* Morado */
+    border-bottom: 1px dashed #e1bee7; /* Línea discontinua morada clara */
+    padding-bottom: 5px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.contact-info h3 { /* Estilos específicos para el título de Contacto */
+    font-size: 1.4em; /* Un poco más grande */
+    color: #e91e63; /* Usar el rosa principal para destacar */
+    border-bottom: 2px solid #f8bbd0; /* Borde inferior un poco más grueso */
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: inline-block; /* Para que el borde se ajuste al texto */
+    padding-right: 10px; /* Espacio a la derecha */
+}
+
+.contact-info h3::before { /* Añadir un icono antes del título */
+    content: "💌 "; /* Emoji de carta */
+    font-size: 0.9em; /* Ajustar tamaño del emoji */
+}
+
+.contact-info p {
+    margin: 8px 0;
+    line-height: 1.6;
+    color: #616161; /* Gris suave */
+}
+
+.contact-info a {
+    color: #e91e63; /* Rosa principal para enlaces */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.contact-info a:hover {
+    color: #ad1457; /* Rosa más oscuro al pasar el ratón */
+    text-decoration: none;
+}
+
+/* Estilos adicionales opcionales */
+strong {
+    font-weight: 600;
+    color: #4a4a4a;
+}
