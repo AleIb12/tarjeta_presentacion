@@ -1,59 +1,615 @@
+/* Reset y base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif; /* Fuente más "cute" */
-    background-color: #fce4ec; /* Rosa pastel muy claro */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
 }
 
+/* Fondo animado */
+.background-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f39c12, #e74c3c);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    z-index: -2;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Elementos flotantes */
+.floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-element {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+    animation-delay: var(--delay);
+    left: var(--x);
+    top: var(--y);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Tarjeta principal */
 .card {
-    /* background-color: #fff;  Blanco */ /* Comentado para usar gradiente - Corregido */
-    background-image: linear-gradient(to bottom right, #fff, #fce4ec); /* Gradiente de blanco a rosa pastel */
-    border-radius: 20px; /* Bordes más redondeados */
-    box-shadow: 0 6px 12px rgba(233, 30, 99, 0.15); /* Sombra rosa suave */
-    padding: 25px 40px; /* Ajusta padding para formato horizontal */
-    max-width: 700px; /* Más ancho para formato horizontal */
-    width: 90%;
-    border: 2px solid #f8bbd0; /* Borde rosa claro */
-    position: relative; /* Necesario para posicionar el pseudo-elemento */
-    overflow: hidden; /* Para asegurar que el sello no se salga si es grande */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Añadido para la animación de hover */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 0;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    animation: cardFloat 6s ease-in-out infinite;
 }
 
-.card:hover { /* Efecto al pasar el ratón */
-    transform: scale(1.03); /* Agranda ligeramente la tarjeta */
-    box-shadow: 0 10px 20px rgba(233, 30, 99, 0.25); /* Sombra más pronunciada */
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: rotate 10s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Header con perfil */
+.header {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    padding: 32px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-image {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    background: #4ade80;
+    border-radius: 50%;
+    border: 3px solid white;
+    animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% {
-        opacity: 0.3;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.5;
-        transform: scale(1.1);
-    }
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-.card::after { /* Pseudo-elemento para el sello de osito */
-    content: '🧸'; /* Carácter de osito de peluche */
+.profile-info h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-info h2 {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 12px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(74, 222, 128, 0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* Sección de contacto */
+.contact-info {
+    padding: 32px 28px;
+}
+
+.contact-info h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.section-icon {
+    font-size: 24px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.contact-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.contact-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contact-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contact-value {
+    font-size: 16px;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-value:hover {
+    color: #f093fb;
+}
+
+.coffee-item {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 140, 0, 0.1));
+    border-color: rgba(255, 165, 0, 0.3);
+}
+
+.coffee-item:hover {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.3), rgba(255, 140, 0, 0.2));
+}
+
+/* Sección de compartir */
+.sharing-section {
+    padding: 32px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sharing-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.sharing-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.share-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.share-btn::before {
+    content: '';
     position: absolute;
-    bottom: 10px;
-    right: 15px;
-    font-size: 3em; /* Tamaño del osito */
-    opacity: 0.3; /* Hacerlo un poco transparente como un sello */
-    color: #e91e63; /* Color rosa principal, puede ajustarse */
-    animation: pulse 4s infinite ease-in-out; /* Añadida animación de pulso */
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
 }
 
+.share-btn:hover::before {
+    left: 100%;
+}
+
+.share-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.btn-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.btn-text-wrapper {
+    flex: 1;
+    text-align: left;
+}
+
+.btn-text {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.btn-subtitle {
+    display: block;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+}
+
+.nfc-btn:hover {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.qr-btn:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.vcard-btn:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.1));
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+/* Mensajes de estado */
+.status-message {
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.status-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.status-message.success {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-message.error {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.status-message.info {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Contenedor QR */
+.qr-container {
+    display: none;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.qr-container.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.qr-wrapper h4 {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.qr-wrapper canvas {
+    margin: 16px 0;
+    border-radius: 12px;
+    background: white;
+    padding: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.qr-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+    
+    .card {
+        border-radius: 20px;
+        max-width: 100%;
+    }
+    
+    .header {
+        padding: 24px 20px;
+    }
+    
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+    
+    .contact-info, .sharing-section {
+        padding: 24px 20px;
+    }
+    
+    .contact-grid {
+        gap: 12px;
+    }
+    
+    .contact-item {
+        padding: 12px;
+    }
+    
+    .sharing-buttons {
+        gap: 12px;
+    }
+    
+    .share-btn {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-info h1 {
+        font-size: 24px;
+    }
+    
+    .profile-info h2 {
+        font-size: 14px;
+    }
+    
+    .contact-info h3, .sharing-section h3 {
+        font-size: 18px;
+    }
+    
+    .contact-icon, .btn-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .contact-value {
+        font-size: 14px;
+    }
+    
+    .btn-text {
+        font-size: 14px;
+    }
+}
+
+.floating-element:nth-child(1) { left: 10%; top: 20%; }
+.floating-element:nth-child(2) { left: 80%; top: 30%; }
+.floating-element:nth-child(3) { left: 20%; top: 70%; }
+.floating-element:nth-child(4) { left: 90%; top: 80%; }
+
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Tarjeta principal */
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 
+        0 32px 64px rgba(0, 0, 0, 0.1),
+        0 16px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        0 48px 80px rgba(0, 0, 0, 0.15),
+        0 24px 48px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.card:hover .card-glow {
+    opacity: 1;
+}
+
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Header */
 .header {
     text-align: center;
-    border-bottom: 1px dashed #f8bbd0; /* Línea discontinua rosa */
-    padding-bottom: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 40px;
 }
 
 .header h1 {
@@ -69,49 +625,466 @@ body {
     font-weight: normal;
 }
 
-h3 {
-    color: #8e24aa; /* Morado */
-    border-bottom: 1px dashed #e1bee7; /* Línea discontinua morada clara */
-    padding-bottom: 5px;
-    margin-top: 25px;
-    margin-bottom: 15px;
-    font-size: 1.3em;
+/* Sección de perfil */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-.contact-info h3 { /* Estilos específicos para el título de Contacto */
-    font-size: 1.4em; /* Un poco más grande */
-    color: #e91e63; /* Usar el rosa principal para destacar */
-    border-bottom: 2px solid #f8bbd0; /* Borde inferior un poco más grueso */
+.profile-image {
+    position: relative;
+}
+
+.image-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.image-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+    border-radius: 50%;
+}
+
+.profile-emoji {
+    font-size: 48px;
+    z-index: 1;
+}
+
+.profile-info h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.profile-info h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Secciones */
+.contact-info, .sharing-section {
+    margin-bottom: 40px;
+}
+
+.contact-info h3, .sharing-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 24px;
+}
+
+.section-icon {
+    font-size: 24px;
+}
+
+/* Grid de contactos */
+.contact-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateX(4px);
+}
+
+.contact-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.contact-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contact-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+}
+
+.contact-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-value:hover {
+    color: #667eea;
+}
+
+/* Estilos para la sección de compartir */
+.sharing-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed #f8bbd0;
+}
+
+.sharing-section h3 {
+    color: #e91e63;
+    border-bottom: 2px solid #f8bbd0;
     padding-bottom: 8px;
     margin-bottom: 20px;
-    display: inline-block; /* Para que el borde se ajuste al texto */
-    padding-right: 10px; /* Espacio a la derecha */
+    display: inline-block;
+    padding-right: 10px;
+    font-size: 1.4em;
 }
 
-.contact-info h3::before { /* Añadir un icono antes del título */
-    content: "💌 "; /* Emoji de carta */
-    font-size: 0.9em; /* Ajustar tamaño del emoji */
+.sharing-section h3::before {
+    content: "✨ ";
+    font-size: 0.9em;
 }
 
-.contact-info p {
-    margin: 8px 0;
-    line-height: 1.6;
-    color: #616161; /* Gris suave */
+.sharing-buttons {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-.contact-info a {
-    color: #e91e63; /* Rosa principal para enlaces */
-    text-decoration: none;
-    font-weight: bold;
+.share-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.contact-info a:hover {
-    color: #ad1457; /* Rosa más oscuro al pasar el ratón */
-    text-decoration: none;
+.share-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
 }
 
-/* Estilos adicionales opcionales */
-strong {
+.share-btn:hover::before {
+    left: 100%;
+}
+
+.share-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(102, 126, 234, 0.3);
+}
+
+.share-btn:active {
+    transform: translateY(-2px);
+}
+
+.btn-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: white;
+}
+
+.btn-icon {
+    font-size: 32px;
+}
+
+.btn-text {
+    font-size: 16px;
     font-weight: 600;
-    color: #4a4a4a;
+}
+
+.btn-subtitle {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Estilos para mensajes de estado */
+.status-message {
+    margin: 15px 0;
+    text-align: center;
+    font-size: 0.9em;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.status-message.success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    display: block;
+}
+
+.status-message.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    display: block;
+}
+
+.status-message.info {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    display: block;
+}
+
+/* Contenedor QR */
+.qr-container {
+    display: none;
+    animation: fadeIn 0.5s ease;
+    margin-top: 20px;
+}
+
+.qr-container.show {
+    display: block;
+}
+
+.qr-wrapper {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#qr-code {
+    border-radius: 12px;
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.qr-text {
+    margin-top: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+    body {
+        padding: 16px;
+    }
+    
+    .card {
+        padding: 24px;
+    }
+    
+    .profile-info h1 {
+        font-size: 24px;
+    }
+    
+    .image-placeholder {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .profile-emoji {
+        font-size: 40px;
+    }
+    
+    .contact-item {
+        padding: 12px;
+    }
+    
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .share-btn {
+        padding: 16px;
+    }
+    
+    .btn-icon {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 15px;
+        margin: 5px;
+    }
+    
+    .header h1 {
+        font-size: 1.5em;
+    }
+    
+    .qr-container {
+        padding: 15px;
+    }
+    
+    #qr-code {
+        width: 150px !important;
+        height: 150px !important;
+    }
+}
+
+/* Animaciones especiales */
+@keyframes shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: calc(200px + 100%) 0; }
+}
+
+.contact-item:hover .contact-icon {
+    animation: shimmer 2s infinite;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+    background-size: 200px 100%;
+}
+
+/* Mejoras visuales adicionales */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.card:hover::after {
+    opacity: 1;
+    animation: shine 1.5s ease-in-out;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Estilos especiales para Buy Me a Coffee */
+.contact-item:has(.contact-icon:contains('☕')) {
+    background: linear-gradient(135deg, rgba(255, 221, 51, 0.1) 0%, rgba(255, 221, 51, 0.05) 100%);
+    border: 1px solid rgba(255, 221, 51, 0.2);
+}
+
+.contact-item:has(.contact-icon:contains('☕')):hover {
+    background: linear-gradient(135deg, rgba(255, 221, 51, 0.2) 0%, rgba(255, 221, 51, 0.1) 100%);
+    transform: translateX(6px);
+}
+
+.contact-item:has(.contact-icon:contains('☕')) .contact-icon {
+    background: linear-gradient(135deg, #FFDD33 0%, #FF6B35 100%);
+    animation: coffee-pulse 3s ease-in-out infinite;
+}
+
+@keyframes coffee-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 8px 16px rgba(255, 221, 51, 0.3);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 12px 24px rgba(255, 221, 51, 0.5);
+    }
+}
+
+/* Alternativa usando atributos data para mejor compatibilidad */
+.contact-item[data-type="coffee"] {
+    background: linear-gradient(135deg, rgba(255, 221, 51, 0.1) 0%, rgba(255, 221, 51, 0.05) 100%);
+    border: 1px solid rgba(255, 221, 51, 0.2);
+}
+
+.contact-item[data-type="coffee"]:hover {
+    background: linear-gradient(135deg, rgba(255, 221, 51, 0.2) 0%, rgba(255, 221, 51, 0.1) 100%);
+    transform: translateX(6px);
+}
+
+.contact-item[data-type="coffee"] .contact-icon {
+    background: linear-gradient(135deg, #FFDD33 0%, #FF6B35 100%);
+    animation: coffee-pulse 3s ease-in-out infinite;
 }
