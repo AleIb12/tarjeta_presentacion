@@ -12,9 +12,6 @@
     <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Librerías -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -142,7 +139,7 @@
                 
                 <button id="qr-btn" class="share-btn qr-btn">
                     <div class="btn-content">
-                        <span class="btn-icon">📷</span>
+                        <span class="btn-icon">�</span>
                         <div class="btn-text-wrapper">
                             <span class="btn-text">Mostrar QR</span>
                             <span class="btn-subtitle">Escanea para agregar</span>
@@ -152,7 +149,7 @@
                 
                 <button id="vcard-btn" class="share-btn vcard-btn">
                     <div class="btn-content">
-                        <span class="btn-icon">�</span>
+                        <span class="btn-icon">📥</span>
                         <div class="btn-text-wrapper">
                             <span class="btn-text">Descargar vCard</span>
                             <span class="btn-subtitle">Guarda en contactos</span>
@@ -175,6 +172,32 @@
         </div>
     </div>
 
+    <!-- Librerías QR con múltiples fallbacks -->
+    <script src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
+    <script>
+        // Verificar si se cargó la librería QR
+        window.qrLibraryLoaded = false;
+        
+        if (typeof qrcode !== 'undefined') {
+            window.qrLibraryLoaded = true;
+            console.log('QR library loaded successfully');
+        } else {
+            console.log('Trying alternative QR library...');
+            // Fallback con otra librería
+            const fallbackScript = document.createElement('script');
+            fallbackScript.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+            fallbackScript.onload = () => {
+                if (typeof QRCode !== 'undefined') {
+                    window.qrLibraryLoaded = true;
+                    console.log('Fallback QR library loaded');
+                } else {
+                    console.log('Both QR libraries failed to load');
+                }
+            };
+            document.head.appendChild(fallbackScript);
+        }
+    </script>
+    
     <script src="contact-sharer.js"></script>
 </body>
 </html>

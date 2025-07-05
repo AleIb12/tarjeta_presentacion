@@ -20,6 +20,7 @@ class ContactSharer {
     init() {
         this.setupEventListeners();
         this.checkNFCSupport();
+        this.checkQRSupport();
     }
 
     setupEventListeners() {
@@ -39,16 +40,66 @@ class ContactSharer {
         });
     }
 
+    // Verificar soporte QR
+    checkQRSupport() {
+        const qrBtn = document.getElementById('qr-btn');
+        const subtitle = qrBtn.querySelector('.btn-subtitle');
+        
+        // Esperar un poco para que se carguen las librerías
+        setTimeout(() => {
+            if (window.qrLibraryLoaded || typeof qrcode !== 'undefined' || typeof QRCode !== 'undefined') {
+                console.log('QR Code library is available');
+                this.enableQRButton();
+            } else {
+                console.log('QR Code library failed to load');
+                qrBtn.style.opacity = '0.5';
+                qrBtn.style.cursor = 'not-allowed';
+                qrBtn.style.pointerEvents = 'none';
+                subtitle.textContent = 'Usa vCard en su lugar';
+                
+                const btnIcon = qrBtn.querySelector('.btn-icon');
+                btnIcon.innerHTML = '❌';
+            }
+        }, 1000);
+    }
+
+    // Habilitar botón QR
+    enableQRButton() {
+        const qrBtn = document.getElementById('qr-btn');
+        const subtitle = qrBtn.querySelector('.btn-subtitle');
+        const btnIcon = qrBtn.querySelector('.btn-icon');
+        
+        qrBtn.style.opacity = '1';
+        qrBtn.style.cursor = 'pointer';
+        qrBtn.style.pointerEvents = 'auto';
+        subtitle.textContent = 'Escanea para agregar';
+        btnIcon.innerHTML = '📱';
+        
+        console.log('QR button enabled successfully');
+    }
+
     // Verificar soporte NFC
     checkNFCSupport() {
-        if ('NDEFReader' in window) {
-            console.log('NFC is supported');
-        } else {
-            console.log('NFC is not supported');
-            // Actualizar el botón para mostrar que no es compatible
-            const nfcBtn = document.getElementById('nfc-btn');
-            const subtitle = nfcBtn.querySelector('.btn-subtitle');
+        const nfcBtn = document.getElementById('nfc-btn');
+        const subtitle = nfcBtn.querySelector('.btn-subtitle');
+        
+        // Verificar si es iOS (iPhone/iPad)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        if (!('NDEFReader' in window) || isIOS) {
+            console.log('NFC is not supported on this device/browser');
+            // Deshabilitar el botón visualmente
+            nfcBtn.style.opacity = '0.5';
+            nfcBtn.style.cursor = 'not-allowed';
+            nfcBtn.style.pointerEvents = 'none';
             subtitle.textContent = 'No disponible en este dispositivo';
+            
+            // Agregar un ícono de información
+            const btnIcon = nfcBtn.querySelector('.btn-icon');
+            btnIcon.innerHTML = '❌';
+        } else {
+            console.log('NFC is supported');
+            subtitle.textContent = 'Acerca tu dispositivo';
         }
     }
 
@@ -57,11 +108,20 @@ class ContactSharer {
         const statusMessage = document.getElementById('status-message');
         
         if (type === 'nfc') {
+            // Verificar si es iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            if (isIOS) {
+                this.showMessage('NFC no está disponible en dispositivos iOS. Usa el código QR o descarga el vCard.', 'info');
+                return;
+            }
+            
             if ('NDEFReader' in window) {
                 try {
                     const ndef = new NDEFReader();
                     const vCardData = this.generateVCard();
                     
+                    // Solicitar permisos
                     await ndef.write({
                         records: [
                             {
@@ -74,10 +134,16 @@ class ContactSharer {
                     this.showMessage('¡Contacto compartido por NFC! Acerca otro dispositivo para recibir.', 'success');
                 } catch (error) {
                     console.error('Error al compartir por NFC:', error);
-                    this.showMessage('Error al compartir por NFC. Asegúrate de tener NFC habilitado.', 'error');
+                    if (error.name === 'NotAllowedError') {
+                        this.showMessage('Permiso denegado. Habilita NFC en la configuración del dispositivo.', 'error');
+                    } else if (error.name === 'NotSupportedError') {
+                        this.showMessage('NFC no es compatible con este dispositivo.', 'error');
+                    } else {
+                        this.showMessage('Error al compartir por NFC. Intenta con QR o vCard.', 'error');
+                    }
                 }
             } else {
-                this.showMessage('NFC no es compatible con este dispositivo o navegador.', 'error');
+                this.showMessage('NFC no es compatible con este navegador. Usa Chrome en Android.', 'error');
             }
         }
     }
@@ -90,29 +156,137 @@ class ContactSharer {
         // Alternar la visibilidad del contenedor QR
         if (qrContainer.classList.contains('show')) {
             qrContainer.classList.remove('show');
+            this.showMessage('Código QR ocultado', 'info');
             return;
         }
 
         // Generar vCard para el QR
         const vCardData = this.generateVCard();
         
-        // Generar QR Code
+        // Verificar que el canvas existe
+        if (!canvas) {
+            this.showMessage('Error: Canvas no encontrado', 'error');
+            return;
+        }
+        
+        // Mostrar mensaje de carga
+        this.showMessage('Generando código QR...', 'info');
+        
+        try {
+            // Intentar con la primera librería (qrcode-generator)
+            if (typeof qrcode !== 'undefined') {
+                this.generateQRWithSimpleLibrary(canvas, vCardData, qrContainer);
+            } 
+            // Intentar con la segunda librería (QRCode)
+            else if (typeof QRCode !== 'undefined') {
+                this.generateQRWithQRCodeLibrary(canvas, vCardData, qrContainer);
+            }
+            // Si no hay librerías, usar una API externa
+            else {
+                this.generateQRWithAPI(canvas, vCardData, qrContainer);
+            }
+        } catch (error) {
+            console.error('Error al generar QR:', error);
+            this.showMessage('Error al generar QR. Intenta descargar el vCard.', 'error');
+        }
+    }
+
+    // Generar QR con librería simple
+    generateQRWithSimpleLibrary(canvas, vCardData, qrContainer) {
+        try {
+            const qr = qrcode(0, 'M');
+            qr.addData(vCardData);
+            qr.make();
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200;
+            canvas.height = 200;
+            
+            // Limpiar canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 200, 200);
+            
+            // Dibujar QR
+            const modules = qr.modules;
+            const tileW = 200 / modules.length;
+            const tileH = 200 / modules.length;
+            
+            for (let row = 0; row < modules.length; row++) {
+                for (let col = 0; col < modules.length; col++) {
+                    ctx.fillStyle = modules[row][col] ? '#000000' : '#ffffff';
+                    ctx.fillRect(col * tileW, row * tileH, tileW, tileH);
+                }
+            }
+            
+            qrContainer.classList.add('show');
+            this.showMessage('¡Código QR generado! Escanea para agregar el contacto.', 'success');
+            
+            setTimeout(() => {
+                qrContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+            
+        } catch (error) {
+            console.error('Error con librería simple:', error);
+            this.generateQRWithAPI(canvas, vCardData, qrContainer);
+        }
+    }
+
+    // Generar QR con QRCode.js
+    generateQRWithQRCodeLibrary(canvas, vCardData, qrContainer) {
         QRCode.toCanvas(canvas, vCardData, {
             width: 200,
+            height: 200,
             margin: 2,
             color: {
                 dark: '#000000',
                 light: '#ffffff'
-            }
+            },
+            errorCorrectionLevel: 'M'
         }, (error) => {
             if (error) {
-                console.error('Error al generar QR:', error);
-                this.showMessage('Error al generar código QR.', 'error');
+                console.error('Error con QRCode.js:', error);
+                this.generateQRWithAPI(canvas, vCardData, qrContainer);
             } else {
                 qrContainer.classList.add('show');
                 this.showMessage('¡Código QR generado! Escanea para agregar el contacto.', 'success');
+                
+                setTimeout(() => {
+                    qrContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
             }
         });
+    }
+
+    // Generar QR con API externa (fallback final)
+    generateQRWithAPI(canvas, vCardData, qrContainer) {
+        try {
+            const encodedData = encodeURIComponent(vCardData);
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedData}`;
+            
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+                const ctx = canvas.getContext('2d');
+                canvas.width = 200;
+                canvas.height = 200;
+                ctx.drawImage(img, 0, 0, 200, 200);
+                
+                qrContainer.classList.add('show');
+                this.showMessage('¡Código QR generado! Escanea para agregar el contacto.', 'success');
+                
+                setTimeout(() => {
+                    qrContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            };
+            img.onerror = () => {
+                this.showMessage('Error al generar QR. Usa la opción de descargar vCard.', 'error');
+            };
+            img.src = qrUrl;
+            
+        } catch (error) {
+            console.error('Error con API externa:', error);
+            this.showMessage('Error al generar QR. Usa la opción de descargar vCard.', 'error');
+        }
     }
 
     // Compartir por vCard
@@ -187,7 +361,7 @@ END:VCARD`;
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    new ContactSharer();
+    window.ContactSharer = new ContactSharer();
 });
 
 // Funcionalidad adicional para mejorar la experiencia

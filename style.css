@@ -442,6 +442,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     text-align: center;
     animation: fadeIn 0.3s ease;
+    margin-top: 16px;
 }
 
 .qr-container.show {
@@ -461,11 +462,13 @@ body {
 }
 
 .qr-wrapper canvas {
-    margin: 16px 0;
+    margin: 16px auto;
     border-radius: 12px;
     background: white;
     padding: 16px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    display: block;
+    max-width: 100%;
 }
 
 .qr-description {
