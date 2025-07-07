@@ -184,10 +184,18 @@ tarjeta_presentacion/
    vercel --prod
    ```
 
-### **📚 Documentación Completa**
+### **� GitHub Actions**
+El proyecto incluye 3 workflows de GitHub Actions:
+
+1. **`simple-validation.yml`**: Validación básica (siempre funciona)
+2. **`build-test.yml`**: Validación completa sin fallos críticos
+3. **`deploy.yml`**: Despliegue automático a Vercel (requiere configuración)
+
+### **�📚 Documentación Completa**
 - **DEPLOY_GUIDE.md**: Guía completa de despliegue
 - **OPTIMIZATION.md**: Checklist de optimización
 - **NFC_GUIDE.md**: Guía específica para NFC
+- **GITHUB_ACTIONS_SETUP.md**: Configuración de GitHub Actions + Vercel
 
 ## 🚀 Cómo Usar
 
