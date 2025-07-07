@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap (aunque es un sitio de una sola página)
+Sitemap: https://alisha-contact-card.vercel.app/sitemap.xml
+
+# Crawl-delay para bots (opcional)
+Crawl-delay: 1

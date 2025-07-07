@@ -1,0 +1,27 @@
+# Archivos que no necesita Vercel
+node_modules/
+.git/
+.DS_Store
+*.log
+.env
+.env.local
+.env.production
+.next/
+coverage/
+.nyc_output/
+test/
+tests/
+__tests__/
+spec/
+specs/
+docs/
+documentation/
+README.md
+CHANGELOG.md
+LICENSE
+.gitignore
+.eslintrc*
+.prettierrc*
+tsconfig.json
+*.config.js
+*.config.ts

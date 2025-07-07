@@ -3,16 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto - Alisha Ibarra Bello</title>
+    <title>Alisha Ibarra Bello - Desarrolladora de Software | Contacto Digital</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Tarjeta de presentación digital de Alisha Ibarra Bello, Desarrolladora de Software en Madrid. Contacto profesional con NFC, QR y vCard.">
+    <meta name="keywords" content="Alisha Ibarra, desarrolladora software, Madrid, contacto digital, portfolio, freelance">
+    <meta name="author" content="Alisha Ibarra Bello">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alisha-contact-card.vercel.app">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alisha-contact-card.vercel.app">
+    <meta property="og:title" content="Alisha Ibarra Bello - Desarrolladora de Software">
+    <meta property="og:description" content="Contacta conmigo de forma digital. Desarrolladora de Software disponible para proyectos.">
+    <meta property="og:image" content="https://alisha-contact-card.vercel.app/imagenpro-2.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://alisha-contact-card.vercel.app">
+    <meta property="twitter:title" content="Alisha Ibarra Bello - Desarrolladora de Software">
+    <meta property="twitter:description" content="Contacta conmigo de forma digital. Desarrolladora de Software disponible para proyectos.">
+    <meta property="twitter:image" content="https://alisha-contact-card.vercel.app/imagenpro-2.png">
     
     <!-- Favicon aesthetic -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23667eea;stop-opacity:1' /><stop offset='30%' style='stop-color:%23764ba2;stop-opacity:1' /><stop offset='70%' style='stop-color:%23f093fb;stop-opacity:1' /><stop offset='100%' style='stop-color:%23f5576c;stop-opacity:1' /></linearGradient></defs><path d='M50 5 L80 25 L80 75 L50 95 L20 75 L20 25 Z' fill='url(%23grad)' stroke='rgba(255,255,255,0.3)' stroke-width='2'/><text x='50' y='65' font-family='system-ui, sans-serif' font-size='36' font-weight='300' text-anchor='middle' fill='white'>A</text></svg>" type="image/svg+xml">
     <meta name="theme-color" content="#667eea">
     
-    <!-- Fuentes -->
+    <!-- Preconnect para mejorar rendimiento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Fuentes optimizadas -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- DNS Prefetch para APIs externas -->
+    <link rel="dns-prefetch" href="//api.qrserver.com">
+    <link rel="dns-prefetch" href="//wa.me">
+    <link rel="dns-prefetch" href="//t.me">
+    
+    <!-- Manifest para PWA -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- CSS Principal -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Structured Data para SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Alisha Ibarra Bello",
+      "jobTitle": "Desarrolladora de Software",
+      "url": "https://alishas-atelier.vercel.app",
+      "sameAs": [
+        "https://www.linkedin.com/in/alisha-ibarra-bello-4526561b6",
+        "https://github.com/AleIb12",
+        "https://instagram.com/ali.ibarrabello",
+        "https://buymeacoffee.com/ali.ibarra"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Madrid",
+        "addressCountry": "España"
+      },
+      "email": "ibarrabelloalisha@gmail.com",
+      "telephone": "+34692616005",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+34692616005",
+        "contactType": "professional"
+      }
+    }
+    </script>
 </head>
 <body>
     <!-- Fondo animado -->
@@ -33,7 +98,13 @@
         <div class="header">
             <div class="profile-section">
                 <div class="profile-image">
-                    <img src="imagenpro-2.png" alt="Alisha Ibarra Bello" class="profile-img">
+                    <img src="imagenpro-2.png" 
+                         alt="Alisha Ibarra Bello - Desarrolladora de Software" 
+                         class="profile-img"
+                         loading="eager" 
+                         decoding="async" 
+                         width="80" 
+                         height="80">
                     <div class="status-indicator"></div>
                 </div>
                 <div class="profile-info">
@@ -156,6 +227,26 @@
                         </div>
                     </div>
                 </button>
+                
+                <button id="whatsapp-btn" class="share-btn whatsapp-btn">
+                    <div class="btn-content">
+                        <span class="btn-icon">💬</span>
+                        <div class="btn-text-wrapper">
+                            <span class="btn-text">Compartir por WhatsApp</span>
+                            <span class="btn-subtitle">Enviar mi contacto</span>
+                        </div>
+                    </div>
+                </button>
+                
+                <button id="telegram-btn" class="share-btn telegram-btn">
+                    <div class="btn-content">
+                        <span class="btn-icon">✈️</span>
+                        <div class="btn-text-wrapper">
+                            <span class="btn-text">Compartir por Telegram</span>
+                            <span class="btn-subtitle">Enviar mi contacto</span>
+                        </div>
+                    </div>
+                </button>
             </div>
             
             <!-- Mensajes de estado -->
@@ -172,19 +263,28 @@
         </div>
     </div>
 
-    <!-- Librerías QR con múltiples fallbacks -->
-    <script src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
+    <!-- Librerías QR con múltiples fallbacks optimizadas para Vercel -->
+    <script async src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
     <script>
-        // Verificar si se cargó la librería QR
+        // Verificar si se cargó la librería QR con timeout optimizado
         window.qrLibraryLoaded = false;
         
-        if (typeof qrcode !== 'undefined') {
-            window.qrLibraryLoaded = true;
-            console.log('QR library loaded successfully');
-        } else {
+        // Función para verificar carga de librería
+        function checkQRLibrary() {
+            if (typeof qrcode !== 'undefined') {
+                window.qrLibraryLoaded = true;
+                console.log('QR library loaded successfully');
+                return true;
+            }
+            return false;
+        }
+        
+        // Verificar inmediatamente
+        if (!checkQRLibrary()) {
             console.log('Trying alternative QR library...');
             // Fallback con otra librería
             const fallbackScript = document.createElement('script');
+            fallbackScript.async = true;
             fallbackScript.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
             fallbackScript.onload = () => {
                 if (typeof QRCode !== 'undefined') {
@@ -194,10 +294,53 @@
                     console.log('Both QR libraries failed to load');
                 }
             };
+            fallbackScript.onerror = () => {
+                console.log('Fallback QR library failed to load');
+            };
             document.head.appendChild(fallbackScript);
         }
+        
+        // Configurar panel de debug
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.search.includes('debug=true')) {
+                console.log('Debug mode enabled');
+                // Mostrar información de debug
+                const debugInfo = [];
+                debugInfo.push(`URL: ${window.location.href}`);
+                debugInfo.push(`User Agent: ${navigator.userAgent.substring(0, 50)}...`);
+                debugInfo.push(`Screen: ${window.screen.width}x${window.screen.height}`);
+                debugInfo.push(`QR Library: ${window.qrLibraryLoaded ? 'Loaded' : 'Not loaded'}`);
+                debugInfo.push(`NFC Support: ${'NDEFReader' in window ? 'Yes' : 'No'}`);
+                
+                console.log('Debug Info:', debugInfo.join('\n'));
+            }
+        });
     </script>
     
-    <script src="contact-sharer.js"></script>
+    <script async src="contact-sharer.js"></script>
+    
+    <!-- Script de validación final -->
+    <script>
+        // Verificar que todo esté funcionando después de la carga
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const buttons = ['nfc-btn', 'qr-btn', 'vcard-btn', 'whatsapp-btn', 'telegram-btn'];
+                const missingButtons = buttons.filter(id => !document.getElementById(id));
+                
+                if (missingButtons.length > 0) {
+                    console.error('Missing buttons:', missingButtons);
+                } else {
+                    console.log('All buttons found successfully');
+                }
+                
+                // Verificar que ContactSharer esté cargado
+                if (typeof window.contactSharer === 'undefined') {
+                    console.error('ContactSharer not loaded');
+                } else {
+                    console.log('ContactSharer loaded successfully');
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>

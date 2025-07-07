@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Botones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #333;
+            color: white;
+            padding: 20px;
+        }
+        
+        .share-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: white;
+            cursor: pointer;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        .share-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de Botones</h1>
+    
+    <button id="nfc-btn" class="share-btn">📱 NFC</button>
+    <button id="qr-btn" class="share-btn">📱 QR</button>
+    <button id="vcard-btn" class="share-btn">📥 vCard</button>
+    <button id="whatsapp-btn" class="share-btn">💬 WhatsApp</button>
+    <button id="telegram-btn" class="share-btn">✈️ Telegram</button>
+    
+    <div id="status"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = ['nfc-btn', 'qr-btn', 'vcard-btn', 'whatsapp-btn', 'telegram-btn'];
+            const status = document.getElementById('status');
+            
+            buttons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        status.innerHTML = `<div class="status">Botón ${btnId} funcionando ✅</div>`;
+                        console.log(`Botón ${btnId} clickeado`);
+                    });
+                    console.log(`Botón ${btnId} configurado`);
+                } else {
+                    console.error(`Botón ${btnId} no encontrado`);
+                }
+            });
+            
+            console.log('Test page loaded');
+        });
+    </script>
+</body>
+</html>

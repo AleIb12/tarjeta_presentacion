@@ -1,0 +1,49 @@
+{
+  "name": "alisha-contact-card",
+  "version": "1.0.0",
+  "description": "Tarjeta de presentación digital aesthetic de Alisha Ibarra Bello con funcionalidades avanzadas",
+  "main": "index.html",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "vercel --prod",
+    "preview": "vercel",
+    "lint": "echo 'No linting configured for static site'",
+    "test": "echo 'No tests configured for static site'"
+  },
+  "keywords": [
+    "contact-card",
+    "digital-business-card",
+    "aesthetic",
+    "nfc",
+    "qr-code",
+    "vcard",
+    "portfolio",
+    "glassmorphism",
+    "responsive",
+    "pwa-ready"
+  ],
+  "author": {
+    "name": "Alisha Ibarra Bello",
+    "email": "ibarrabelloalisha@gmail.com",
+    "url": "https://alishas-atelier.vercel.app"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AleIb12/tarjeta-presentacion"
+  },
+  "homepage": "https://alisha-contact-card.vercel.app",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
