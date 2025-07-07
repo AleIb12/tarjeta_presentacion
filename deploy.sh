@@ -15,6 +15,10 @@ fi
 if ! command -v vercel &> /dev/null; then
     echo "📦 Instalando Vercel CLI..."
     npm install -g vercel
+    if [ $? -ne 0 ]; then
+        echo "❌ Error: No se pudo instalar Vercel CLI"
+        exit 1
+    fi
 fi
 
 # Verificar archivos necesarios
@@ -26,6 +30,7 @@ for file in "${required_files[@]}"; do
         echo "❌ Error: No se encontró $file"
         exit 1
     fi
+    echo "✅ $file encontrado"
 done
 
 echo "✅ Todos los archivos necesarios están presentes"

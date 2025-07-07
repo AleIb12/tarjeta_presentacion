@@ -1,0 +1,91 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run build checks
+      run: |
+        echo "Checking project structure..."
+        ls -la
+        echo "Validating HTML..."
+        if [ -f "index.html" ]; then
+          echo "✅ index.html found"
+        else
+          echo "❌ index.html not found"
+          exit 1
+        fi
+        
+        echo "Validating CSS..."
+        if [ -f "style.css" ]; then
+          echo "✅ style.css found"
+        else
+          echo "❌ style.css not found"
+          exit 1
+        fi
+        
+        echo "Validating JavaScript..."
+        if [ -f "contact-sharer.js" ]; then
+          echo "✅ contact-sharer.js found"
+        else
+          echo "❌ contact-sharer.js not found"
+          exit 1
+        fi
+        
+        echo "Validating Vercel config..."
+        if [ -f "vercel.json" ]; then
+          echo "✅ vercel.json found"
+        else
+          echo "❌ vercel.json not found"
+          exit 1
+        fi
+        
+    - name: Deploy to Vercel (Preview)
+      if: github.event_name == 'pull_request'
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID }}
+        vercel-project-id: ${{ secrets.PROJECT_ID }}
+        scope: ${{ secrets.VERCEL_ORG_ID }}
+        
+    - name: Deploy to Vercel (Production)
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID }}
+        vercel-project-id: ${{ secrets.PROJECT_ID }}
+        vercel-args: '--prod'
+        scope: ${{ secrets.VERCEL_ORG_ID }}
+        
+    - name: Comment PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🚀 Deploy preview ready! Check the deployment in the Vercel dashboard.'
+          })

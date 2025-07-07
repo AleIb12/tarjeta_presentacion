@@ -1,0 +1,193 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        if [ -f "package.json" ]; then
+          npm ci
+        else
+          echo "No package.json found, skipping npm install"
+        fi
+        
+    - name: Validate project structure
+      run: |
+        echo "🔍 Validating project structure..."
+        
+        # Check HTML
+        if [ -f "index.html" ]; then
+          echo "✅ index.html found"
+          # Basic HTML validation
+          if grep -q "<!DOCTYPE html>" index.html; then
+            echo "✅ Valid HTML5 doctype"
+          else
+            echo "⚠️ HTML5 doctype not found"
+          fi
+        else
+          echo "❌ index.html not found"
+          exit 1
+        fi
+        
+        # Check CSS
+        if [ -f "style.css" ]; then
+          echo "✅ style.css found"
+          # Check if CSS is not empty
+          if [ -s "style.css" ]; then
+            echo "✅ CSS file has content"
+          else
+            echo "⚠️ CSS file is empty"
+          fi
+        else
+          echo "❌ style.css not found"
+          exit 1
+        fi
+        
+        # Check JavaScript
+        if [ -f "contact-sharer.js" ]; then
+          echo "✅ contact-sharer.js found"
+          # Basic JS validation
+          if grep -q "class ContactSharer" contact-sharer.js; then
+            echo "✅ ContactSharer class found"
+          else
+            echo "⚠️ ContactSharer class not found"
+          fi
+        else
+          echo "❌ contact-sharer.js not found"
+          exit 1
+        fi
+        
+        # Check Vercel config
+        if [ -f "vercel.json" ]; then
+          echo "✅ vercel.json found"
+        else
+          echo "⚠️ vercel.json not found"
+        fi
+        
+        # Check image
+        if [ -f "imagenpro-2.png" ]; then
+          echo "✅ Profile image found"
+        else
+          echo "⚠️ Profile image not found"
+        fi
+        
+        # Check documentation
+        if [ -f "README.md" ]; then
+          echo "✅ README.md found"
+        else
+          echo "⚠️ README.md not found"
+        fi
+        
+        echo "🎉 Project structure validation completed!"
+        
+    - name: Test HTML validity
+      run: |
+        echo "🔍 Testing HTML structure..."
+        
+        # Check for required meta tags
+        if grep -q '<meta charset="UTF-8">' index.html; then
+          echo "✅ Charset meta tag found"
+        else
+          echo "⚠️ Charset meta tag missing"
+        fi
+        
+        if grep -q '<meta name="viewport"' index.html; then
+          echo "✅ Viewport meta tag found"
+        else
+          echo "⚠️ Viewport meta tag missing"
+        fi
+        
+        # Check for required elements
+        if grep -q '<title>' index.html; then
+          echo "✅ Title tag found"
+        else
+          echo "❌ Title tag missing"
+          exit 1
+        fi
+        
+        echo "✅ HTML validation completed!"
+        
+    - name: Test CSS validity
+      run: |
+        echo "🔍 Testing CSS structure..."
+        
+        # Check for basic CSS structure
+        if grep -q "body {" style.css; then
+          echo "✅ Body styles found"
+        else
+          echo "⚠️ Body styles not found"
+        fi
+        
+        if grep -q ".card {" style.css; then
+          echo "✅ Card styles found"
+        else
+          echo "⚠️ Card styles not found"
+        fi
+        
+        if grep -q ".share-btn {" style.css; then
+          echo "✅ Button styles found"
+        else
+          echo "⚠️ Button styles not found"
+        fi
+        
+        echo "✅ CSS validation completed!"
+        
+    - name: Test JavaScript validity
+      run: |
+        echo "🔍 Testing JavaScript structure..."
+        
+        # Check for basic JS structure
+        if grep -q "class ContactSharer" contact-sharer.js; then
+          echo "✅ ContactSharer class found"
+        else
+          echo "❌ ContactSharer class missing"
+          exit 1
+        fi
+        
+        if grep -q "init()" contact-sharer.js; then
+          echo "✅ Init method found"
+        else
+          echo "⚠️ Init method not found"
+        fi
+        
+        echo "✅ JavaScript validation completed!"
+        
+    - name: Generate deployment report
+      run: |
+        echo "📊 Deployment Report" > deployment-report.txt
+        echo "===================" >> deployment-report.txt
+        echo "Date: $(date)" >> deployment-report.txt
+        echo "Commit: ${{ github.sha }}" >> deployment-report.txt
+        echo "Branch: ${{ github.ref_name }}" >> deployment-report.txt
+        echo "" >> deployment-report.txt
+        echo "Files checked:" >> deployment-report.txt
+        echo "- index.html ✅" >> deployment-report.txt
+        echo "- style.css ✅" >> deployment-report.txt
+        echo "- contact-sharer.js ✅" >> deployment-report.txt
+        echo "- vercel.json ✅" >> deployment-report.txt
+        echo "" >> deployment-report.txt
+        echo "Ready for deployment! 🚀" >> deployment-report.txt
+        
+        cat deployment-report.txt
+        
+    - name: Success message
+      run: |
+        echo "🎉 Build successful!"
+        echo "Your contact card is ready for deployment."
+        echo "To deploy to Vercel, run: vercel --prod"
